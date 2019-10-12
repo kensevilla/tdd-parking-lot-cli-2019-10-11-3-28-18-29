@@ -16,21 +16,34 @@ public class ParkingLot {
     }
 
     public int getAvailableParkingPosition() {
-        return cars.size() - capacity;
+        return capacity - cars.size();
     }
 
     public ParkingTicket parkCar(Car car){
-        if(cars.size()<capacity) {
+        if(getAvailableParkingPosition()>0) {
             ParkingTicket parkingTicket = new ParkingTicket();
             cars.put(parkingTicket, car);
             return parkingTicket;
+        }
+        else{
+            System.out.append("Not enough position.");
         }
         return null;
     }
 
     public Car fetchCar(ParkingTicket parkingTicket){
-        Car car = cars.get(parkingTicket);
-        cars.remove(parkingTicket);
+        Car car = new Car();
+        if(parkingTicket != null) {
+             car = cars.get(parkingTicket);
+            if (car != null) {
+                cars.remove(parkingTicket);
+            } else {
+                System.out.append("Unrecognized parking ticket");
+            }
+        }
+        else{
+            System.out.append("Please provide your parking ticket.");
+        }
         return car;
     }
 

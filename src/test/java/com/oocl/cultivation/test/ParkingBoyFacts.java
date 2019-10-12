@@ -4,11 +4,22 @@ import com.oocl.cultivation.Car;
 import com.oocl.cultivation.ParkingBoy;
 import com.oocl.cultivation.ParkingLot;
 import com.oocl.cultivation.ParkingTicket;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ParkingBoyFacts {
+    private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+
+    @BeforeEach
+    public void setup() {
+        System.setOut(new PrintStream(outContent));
+    }
+
     @Test
     void should_return_parking_ticket_when_car_is_park_by_parking_boy_in_parking_lot(){
         ParkingLot parkingLot = new ParkingLot();
@@ -108,5 +119,46 @@ class ParkingBoyFacts {
 
         ParkingTicket parkingTicket = parkingBoy.park(new Car());
         assertNull(parkingTicket);
+    }
+
+    @Test
+    void should_return_alert_when_ticket_already_used(){
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        Car car = new Car();
+
+        ParkingTicket parkingTicket = parkingBoy.park(car);
+        Car fetchedCar = parkingBoy.fetch(parkingTicket);
+        assertNotNull(fetchedCar);
+        fetchedCar = parkingBoy.fetch(parkingTicket);
+        assertNull(fetchedCar);
+        assertEquals("Unrecognized parking ticket", outContent.toString());
+    }
+
+    @Test
+    void should_return_alert_when_ticket_is_null(){
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+        Car car = new Car();
+
+        ParkingTicket parkingTicket = null;
+        parkingBoy.fetch(parkingTicket);
+
+        assertEquals("Please provide your parking ticket.", outContent.toString());
+    }
+
+    @Test
+    void should_return_alert_when_parking_without_available_position(){
+        int ctr = 0;
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLot);
+
+        do {
+            parkingBoy.park(new Car());
+            ctr++;
+        }while (ctr<10);
+
+        parkingBoy.park(new Car());
+        assertEquals("Not enough position.", outContent.toString());
     }
 }
