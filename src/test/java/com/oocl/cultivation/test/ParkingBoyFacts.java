@@ -161,4 +161,34 @@ class ParkingBoyFacts {
         parkingBoy.park(new Car());
         assertEquals("Not enough position.", parkingBoy.getLastErrorMessage());
     }
+
+    @Test
+    void should_return_multiple_parking_lot_when_added_parking_lots_to_parking_boy(){
+        List<ParkingLot> parkingLotList = new ArrayList<>();
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingLot otherParkingLot = new ParkingLot();
+        parkingLotList.add(parkingLot);
+        parkingLotList.add(otherParkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLotList);
+
+        assertEquals(2, parkingBoy.getParkingLotList().size());
+    }
+
+    @Test
+    void should_park_to_other_parking_lot_when_first_parking_lot_is_full(){
+        List<ParkingLot> parkingLotList = new ArrayList<>();
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingLot otherParkingLot = new ParkingLot();
+        parkingLotList.add(parkingLot);
+        parkingLotList.add(otherParkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLotList);
+
+        int ctr = 0;
+        do {
+            parkingBoy.park(new Car());
+            ctr++;
+        }while (ctr<10 + 1);
+
+        assertEquals(1, otherParkingLot.getCars().size());
+    }
 }

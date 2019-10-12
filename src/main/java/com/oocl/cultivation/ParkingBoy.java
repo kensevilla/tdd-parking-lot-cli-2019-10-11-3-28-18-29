@@ -10,18 +10,34 @@ public class ParkingBoy {
 
     public ParkingBoy(ParkingLot parkingLot) {
         this.parkingLot = parkingLot;
+        this.parkingLotList.add(parkingLot);
     }
 
     public ParkingBoy(List<ParkingLot> parkingLotList) {
         this.parkingLotList = parkingLotList;
+        this.parkingLot = parkingLotList.get(0);
     }
 
     public ParkingTicket park(Car car) {
+        chooseParkingLot();
         return parkingLot.parkCar(car);
     }
 
+    private void chooseParkingLot() {
+        this.parkingLot = parkingLotList.stream()
+                .filter(tempParkingLot -> tempParkingLot.getAvailableParkingPosition()>0)
+                .findFirst()
+                .orElse(this.parkingLot);
+    }
+
     public Car fetch(ParkingTicket ticket) {
-        return parkingLot.fetchCar(ticket);
+        for(ParkingLot tempParkingLot : parkingLotList){
+            Car car = tempParkingLot.fetchCar(ticket);
+            if(car != null){
+                return car;
+            }
+        }
+        return null;
     }
 
     public String getLastErrorMessage() {

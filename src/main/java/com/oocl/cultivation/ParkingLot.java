@@ -1,12 +1,13 @@
 package com.oocl.cultivation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ParkingLot {
     private final int capacity;
     private Map<ParkingTicket, Car> cars = new HashMap<>();
-
     public String getAlertMessage() {
         return alertMessage;
     }
@@ -22,7 +23,11 @@ public class ParkingLot {
     }
 
     public int getAvailableParkingPosition() {
-        return capacity - cars.size();
+        int availableParkingPosition = capacity - cars.size();
+        if(availableParkingPosition <= 0) {
+            alertMessage = "Not enough position.";
+        }
+        return availableParkingPosition;
     }
 
     public ParkingTicket parkCar(Car car){
@@ -31,14 +36,11 @@ public class ParkingLot {
             cars.put(parkingTicket, car);
             return parkingTicket;
         }
-        else{
-            alertMessage = "Not enough position.";
-        }
         return null;
     }
 
     public Car fetchCar(ParkingTicket parkingTicket){
-        Car car = new Car();
+        Car car = null;
         if(parkingTicket != null) {
              car = cars.get(parkingTicket);
             if (car != null) {
