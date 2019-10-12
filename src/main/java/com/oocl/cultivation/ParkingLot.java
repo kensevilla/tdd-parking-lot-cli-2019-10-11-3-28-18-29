@@ -7,6 +7,12 @@ public class ParkingLot {
     private final int capacity;
     private Map<ParkingTicket, Car> cars = new HashMap<>();
 
+    public String getAlertMessage() {
+        return alertMessage;
+    }
+
+    private String alertMessage;
+
     public ParkingLot() {
         this(10);
     }
@@ -26,7 +32,7 @@ public class ParkingLot {
             return parkingTicket;
         }
         else{
-            System.out.append("Not enough position.");
+            alertMessage = "Not enough position.";
         }
         return null;
     }
@@ -38,11 +44,11 @@ public class ParkingLot {
             if (car != null) {
                 cars.remove(parkingTicket);
             } else {
-                System.out.append("Unrecognized parking ticket");
+                alertMessage = "Unrecognized parking ticket";
             }
         }
         else{
-            System.out.append("Please provide your parking ticket.");
+            alertMessage =  "Please provide your parking ticket.";
         }
         return car;
     }

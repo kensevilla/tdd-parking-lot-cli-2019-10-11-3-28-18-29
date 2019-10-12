@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -128,11 +130,9 @@ class ParkingBoyFacts {
         Car car = new Car();
 
         ParkingTicket parkingTicket = parkingBoy.park(car);
-        Car fetchedCar = parkingBoy.fetch(parkingTicket);
-        assertNotNull(fetchedCar);
-        fetchedCar = parkingBoy.fetch(parkingTicket);
-        assertNull(fetchedCar);
-        assertEquals("Unrecognized parking ticket", outContent.toString());
+        parkingBoy.fetch(parkingTicket);
+        parkingBoy.fetch(parkingTicket);
+        assertEquals("Unrecognized parking ticket", parkingBoy.getLastErrorMessage());
     }
 
     @Test
@@ -144,7 +144,7 @@ class ParkingBoyFacts {
         ParkingTicket parkingTicket = null;
         parkingBoy.fetch(parkingTicket);
 
-        assertEquals("Please provide your parking ticket.", outContent.toString());
+        assertEquals("Please provide your parking ticket.", parkingBoy.getLastErrorMessage());
     }
 
     @Test
@@ -159,6 +159,6 @@ class ParkingBoyFacts {
         }while (ctr<10);
 
         parkingBoy.park(new Car());
-        assertEquals("Not enough position.", outContent.toString());
+        assertEquals("Not enough position.", parkingBoy.getLastErrorMessage());
     }
 }
