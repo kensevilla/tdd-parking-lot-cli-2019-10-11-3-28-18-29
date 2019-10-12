@@ -191,4 +191,46 @@ class ParkingBoyFacts {
 
         assertEquals(1, otherParkingLot.getCars().size());
     }
+
+    @Test
+    void should_park_to_third_parking_lot_when_first_and_second_parking_lot_is_full(){
+        List<ParkingLot> parkingLotList = new ArrayList<>();
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingLot secondParkingLot = new ParkingLot();
+        ParkingLot thirdParkingLot = new ParkingLot();
+        parkingLotList.add(parkingLot);
+        parkingLotList.add(secondParkingLot);
+        parkingLotList.add(thirdParkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLotList);
+
+        int ctr = 0;
+        do {
+            parkingBoy.park(new Car());
+            ctr++;
+        }while (ctr<20 + 3);
+
+        assertEquals(3, thirdParkingLot.getCars().size());
+    }
+
+    @Test
+    void should_return_correct_car_when_park_on_third_parking_lot(){
+        List<ParkingLot> parkingLotList = new ArrayList<>();
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingLot secondParkingLot = new ParkingLot();
+        ParkingLot thirdParkingLot = new ParkingLot();
+        parkingLotList.add(parkingLot);
+        parkingLotList.add(secondParkingLot);
+        parkingLotList.add(thirdParkingLot);
+        ParkingBoy parkingBoy = new ParkingBoy(parkingLotList);
+
+        int ctr = 0;
+        do {
+            parkingBoy.park(new Car());
+            ctr++;
+        }while (ctr<10 + 10);
+        Car car = new Car();
+        ParkingTicket parkingTicket = parkingBoy.park(car);
+        Car fetchedCar = parkingBoy.fetch(parkingTicket);
+        assertEquals(car, fetchedCar);
+    }
 }
