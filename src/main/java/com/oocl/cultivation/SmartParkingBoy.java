@@ -2,13 +2,12 @@ package com.oocl.cultivation;
 
 import java.util.List;
 
-public class ParkingBoy extends ParkingBoyType{
-
-    public ParkingBoy(ParkingLot parkingLot) {
+public class SmartParkingBoy extends ParkingBoyType {
+    public SmartParkingBoy(ParkingLot parkingLot) {
         super.setParkingLot(parkingLot);
     }
 
-    public ParkingBoy(List<ParkingLot> parkingLotList) {
+    public SmartParkingBoy(List<ParkingLot> parkingLotList) {
         super.setParkingLotList(parkingLotList);
     }
 
@@ -21,9 +20,8 @@ public class ParkingBoy extends ParkingBoyType{
     @Override
     public void chooseParkingLot() {
         super.setParkingLot(super.getParkingLotList().stream()
-                .filter(tempParkingLot -> tempParkingLot.getAvailableParkingPosition()>0)
-                .findFirst()
-                .orElse(super.getParkingLot()));
+                .reduce((a, b) -> a.getAvailableParkingPosition() > b.getAvailableParkingPosition() ? a : b)
+                .get());
     }
 
     @Override
