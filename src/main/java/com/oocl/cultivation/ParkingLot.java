@@ -7,6 +7,10 @@ import java.util.Map;
 
 public class ParkingLot {
     private final int capacity;
+    public int getCapacity() {
+        return capacity;
+    }
+
     private Map<ParkingTicket, Car> cars = new HashMap<>();
     public String getAlertMessage() {
         return alertMessage;

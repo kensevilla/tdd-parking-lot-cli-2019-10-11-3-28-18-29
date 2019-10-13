@@ -232,7 +232,7 @@ class ParkingBoyFacts {
     }
 
     @Test
-    void should_return_both_parking_lots_with_equal_available_postion(){
+    void should_return_both_parking_lots_with_equal_available_postion_when_park_by_smart_parking_boy(){
         List<ParkingLot> parkingLotList = new ArrayList<>();
         ParkingLot parkingLot = new ParkingLot();
         ParkingLot otherParKingLot = new ParkingLot();
@@ -250,7 +250,7 @@ class ParkingBoyFacts {
     }
 
     @Test
-    void should_return_1st_parking_lot_with_9_and_2nd_parking_lot_with_8_available_postion_given_3_cars(){
+    void should_return_1st_parking_lot_with_9_and_2nd_parking_lot_with_8_available_postion_given_3_cars_when_park_by_smart_parking_boy(){
         List<ParkingLot> parkingLotList = new ArrayList<>();
         ParkingLot parkingLot = new ParkingLot();
         ParkingLot otherParKingLot = new ParkingLot();
@@ -266,5 +266,24 @@ class ParkingBoyFacts {
 
         assertEquals(smartParkingBoy.getParkingLotList().get(0).getAvailableParkingPosition(), 9);
         assertEquals(smartParkingBoy.getParkingLotList().get(1).getAvailableParkingPosition(), 8);
+    }
+
+    @Test
+    void should_park_on_the_second_parking_lot_given_larger_position_rate_when_4_cars_park_by_super_smart_parking_boy(){
+        List<ParkingLot> parkingLotList = new ArrayList<>();
+        ParkingLot parkingLot = new ParkingLot(20);
+        ParkingLot otherParKingLot = new ParkingLot(50);
+        parkingLotList.add(parkingLot);
+        parkingLotList.add(otherParKingLot);
+        ParkingBoyType superSmartParkingBoy = new SuperSmartParkingBoy(parkingLotList);
+
+        int ctr = 0;
+        do {
+            superSmartParkingBoy.park(new Car());
+            ctr++;
+        }while (ctr<4);
+
+        assertEquals(superSmartParkingBoy.getParkingLotList().get(0).getAvailableParkingPosition(), 19);
+        assertEquals(superSmartParkingBoy.getParkingLotList().get(1).getAvailableParkingPosition(), 47);
     }
 }
