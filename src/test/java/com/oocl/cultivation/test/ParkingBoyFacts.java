@@ -286,4 +286,73 @@ class ParkingBoyFacts {
         assertEquals(superSmartParkingBoy.getParkingLotList().get(0).getAvailableParkingPosition(), 19);
         assertEquals(superSmartParkingBoy.getParkingLotList().get(1).getAvailableParkingPosition(), 47);
     }
+
+    @Test
+    void should_return_fetched_car_when_service_manager_asks_parking_boys_to_park_and_fetch(){
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingServiceManager serviceManager = new ParkingServiceManager(parkingLot);
+        List<ParkingBoyType> parkingBoyList = new ArrayList<>();
+        ParkingBoyType parkingBoy = new ParkingBoy(parkingLot);
+        ParkingBoyType smartParkingBoy = new SmartParkingBoy(parkingLot);
+        parkingBoyList.add(parkingBoy);
+        parkingBoyList.add(smartParkingBoy);
+        serviceManager.setManagementList(parkingBoyList);
+
+        Car car = new Car();
+        ParkingTicket parkingTicket = serviceManager.askToPark(parkingBoy, car);
+        Car fetchedCar = serviceManager.askToFetch(smartParkingBoy, parkingTicket);
+
+        assertEquals(car, fetchedCar);
+    }
+
+    @Test
+    void should_return_fetched_car_when_service_manager_park_and_fetch(){
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingServiceManager serviceManager = new ParkingServiceManager(parkingLot);
+
+        Car car = new Car();
+        ParkingTicket parkingTicket = serviceManager.park(car);
+        Car fetchedCar = serviceManager.fetch(parkingTicket);
+
+        assertEquals(car, fetchedCar);
+    }
+
+    @Test
+    void should_return_alert_message_when_false_ticket_and_park_by_service_manager(){
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingServiceManager serviceManager = new ParkingServiceManager(parkingLot);
+
+        Car car = new Car();
+        ParkingTicket parkingTicket = serviceManager.park(car);
+        ParkingTicket falseParkingTicket = new ParkingTicket();
+        serviceManager.fetch(falseParkingTicket);
+
+        assertEquals("Unrecognized parking ticket", serviceManager.getLastErrorMessage());
+    }
+
+    @Test
+    void should_return_alert_message_when_null_ticket_and_park_by_service_manager(){
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingServiceManager serviceManager = new ParkingServiceManager(parkingLot);
+
+        Car car = new Car();
+        ParkingTicket parkingTicket = serviceManager.park(car);
+        ParkingTicket nullParkingTicket = null;
+        serviceManager.fetch(nullParkingTicket);
+
+        assertEquals("Please provide your parking ticket.", serviceManager.getLastErrorMessage());
+    }
+
+    @Test
+    void should_return_alert_message_when_no_more_capacity_and_park_by_service_manager(){
+        ParkingLot parkingLot = new ParkingLot();
+        ParkingServiceManager serviceManager = new ParkingServiceManager(parkingLot);
+        int ctr = 0;
+        do {
+            serviceManager.park(new Car());
+            ctr++;
+        }while(ctr<10 + 1);
+
+        assertEquals("Not enough position.", serviceManager.getLastErrorMessage());
+    }
 }
