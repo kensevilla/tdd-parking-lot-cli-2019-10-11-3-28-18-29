@@ -23,18 +23,4 @@ public class SuperSmartParkingBoy extends ParkingBoyType{
                 .reduce((a, b) -> a.getAvailableParkingPosition()/a.getCapacity() > b.getAvailableParkingPosition()/b.getCapacity() ? a : b)
                 .get());
     }
-
-    @Override
-    public Car fetch(ParkingTicket ticket) {
-        return super.fetch(ticket);
-    }
-
-    @Override
-    public String getLastErrorMessage() {
-        return super.getLastErrorMessage();
-    }
-
-    public List<ParkingLot> getParkingLotList() {
-        return super.getParkingLotList();
-    }
 }
